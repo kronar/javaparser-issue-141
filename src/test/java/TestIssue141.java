@@ -1,7 +1,10 @@
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.body.BodyDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.comments.JavadocComment;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,9 +20,17 @@ public class TestIssue141 {
     @Test
     public void testIssue141() throws IOException, ParseException {
         CompilationUnit parse = JavaParser.parse(new File("./src/main/java/ClassToParse.java"));
-        List<ImportDeclaration> imports = parse.getImports();
         System.out.println();
-        Assert.assertNotNull(imports);
-        Assert.assertFalse(imports.isEmpty());
+
+        TypeDeclaration typeDeclaration = parse.getTypes().get(0);
+        List<BodyDeclaration> members = typeDeclaration.getMembers();
+        for (BodyDeclaration member : members) {
+            if (member instanceof MethodDeclaration){
+                MethodDeclaration md = (MethodDeclaration)member;
+                JavadocComment javaDoc = md.getJavaDoc();
+                Assert.assertNotNull(javaDoc);
+            }
+        }
+
     }
 }

@@ -5,7 +5,10 @@ import com.google.common.base.Optional;
  */
 public class ClassToParse {
 
-
+    /**
+     * Some javadoc
+     * @param args
+     */
     public static void main(String[] args) {
         Optional<String> stringOptional = Optional.fromNullable(System.getProperty("os.name"));
 
